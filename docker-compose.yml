@@ -13,16 +13,16 @@ services:
     build:
       context: ./nginx
       args:
-        DOMAIN: ${DOMAIN}
-        EMAIL: ${EMAIL}
+        DOMAINS: ${DOMAINS}
         FLASK: application
     ports:
       - 80:80
       - 443:443
     volumes:
-      - /etc/letsencrypt:/etc/letsencrypt
+      - "certshare:/shared"
     depends_on:
       - application
+      - client
 
   application:
     build: ./${APP_FOLDER}
@@ -31,3 +31,15 @@ services:
       - FLASK_ENV=${FLASK_ENV}
     ports:
       - 5000:5000
+
+  client:
+    build:
+      context: ./client
+      args:
+        DOMAINS: ${DOMAINS}
+    volumes:
+      - "certshare:/shared"
+
+volumes:
+  certshare:
+    driver: local

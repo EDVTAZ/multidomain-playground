@@ -3,7 +3,7 @@ FROM nginx:1.19-alpine
 
 # Install certbot for letsencrypt certificates
 # Install also an init handler for alpine cron
-RUN apk add --no-cache certbot openrc busybox-initscripts
+RUN apk add --no-cache openrc busybox-initscripts
 
 # Replace existing files by our own configs
 RUN rm /etc/nginx/nginx.conf && rm /etc/nginx/conf.d/default.conf
@@ -30,14 +30,9 @@ RUN envsubst \
       >/etc/nginx/conf.d/application.conf \
   && rm /etc/nginx/conf.d/flask_app.conf
 
-# Directory needed for LetEncrypt certificates renewal
-RUN mkdir /var/lib/certbot
-
 # App entrypoint and auto-renewal scripts
 COPY ./bin/entrypoint.sh /entrypoint.sh
-COPY ./bin/renew /etc/periodic/weekly/renew
-RUN chmod +x /entrypoint.sh \
-  && chmod +x /etc/periodic/weekly/renew
+RUN chmod +x /entrypoint.sh
 
 # Install certificates and launch
-ENTRYPOINT ../entrypoint.sh $DOMAIN $EMAIL
+ENTRYPOINT ../entrypoint.sh 
