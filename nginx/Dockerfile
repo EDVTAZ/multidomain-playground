@@ -14,13 +14,11 @@ COPY ./conf.d/flask_app.conf /etc/nginx/conf.d/
 # The variables in Nginx needs to be in this specific format: ${FOO}. That's why
 # we create also a DOLLAR variable to add the "real" $ in our config flask_app.conf
 # ex: $host needs to be set as ${DOLLAR}host
-ARG DOMAIN
+ARG DOMAINS
 ARG FLASK
-ARG EMAIL
 
-ENV DOMAIN=$DOMAIN
+ENV DOMAINS=$DOMAINS
 ENV FLASK=$FLASK
-ENV EMAIL=$EMAIL
 ENV DOLLAR='$'
 
 # Substitute contents and write a new application.conf file, which is imported

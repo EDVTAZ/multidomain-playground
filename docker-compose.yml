@@ -20,6 +20,9 @@ services:
       - 443:443
     volumes:
       - "certshare:/shared"
+    networks:
+      playground:
+        ipv4_address: ${NGINX_IP}
     depends_on:
       - application
       - client
@@ -31,15 +34,33 @@ services:
       - FLASK_ENV=${FLASK_ENV}
     ports:
       - 5000:5000
+    networks:
+      playground:
+        ipv4_address: 172.25.0.12
 
   client:
     build:
       context: ./client
       args:
         DOMAINS: ${DOMAINS}
+    environment:
+      - DOMAINS=${DOMAINS}
+      - NGINX_IP=${NGINX_IP}
     volumes:
       - "certshare:/shared"
+    networks:
+      playground:
+        ipv4_address: 172.25.0.13
 
 volumes:
   certshare:
     driver: local
+
+networks:
+  playground:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.25.0.0/16
+          gateway: 172.25.0.1
