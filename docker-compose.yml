@@ -48,6 +48,7 @@ services:
       - NGINX_IP=${NGINX_IP}
     volumes:
       - "certshare:/shared"
+      - ${PWD}/client/scripts:/pwscripts
     networks:
       playground:
         ipv4_address: 172.25.0.13

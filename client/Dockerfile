@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/playwright
+FROM mcr.microsoft.com/playwright/python
 
 RUN curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64" && \ 
     chmod +x mkcert-v*-linux-amd64 && \
